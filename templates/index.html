@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Campus Library Assistant</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="/"><span class="brand-mark">L</span><span>Campus<span class="brand-muted">Library</span></span></a>
+  <nav><a class="active" href="/">Chat</a><a href="#catalog">Book catalog</a><a href="/admin">Admin</a></nav>
+</header>
+<main class="page">
+  <section class="hero">
+    <div class="eyebrow"><span class="pulse"></span> YOUR DIGITAL LIBRARY DESK</div>
+    <h1>Find your next <em>great read.</em></h1>
+    <p>Ask about books, authors, subjects, and availability. Your library assistant searches the current catalog for you.</p>
+  </section>
+  <section class="workspace">
+    <div class="chat-panel panel">
+      <div class="panel-head"><div class="avatar">✦</div><div><strong>Library Assistant</strong><small><span class="status-dot"></span> Online · Catalog-aware</small></div><span class="head-tag">BETA</span></div>
+      <div id="messages" class="messages" aria-live="polite">
+        <div class="message assistant"><div class="bubble">Hi there! 👋 I'm your college library assistant. Ask me to find a title, check availability, or recommend books for a subject you're studying.</div><span class="message-time">JUST NOW</span></div>
+      </div>
+      <div class="suggestions"><button type="button" data-prompt="Which programming books are available?">Programming books</button><button type="button" data-prompt="Recommend a book for learning AI">Learn AI</button><button type="button" data-prompt="What subjects are in the catalog?">Browse subjects</button></div>
+      <form id="chat-form" class="composer"><input id="chat-input" maxlength="1000" placeholder="Ask about books, authors, or subjects…" autocomplete="off" aria-label="Your question"><button type="submit" aria-label="Send message">↑</button></form>
+      <div class="privacy-note">Answers are based on this demo's catalog, not live library records.</div>
+    </div>
+    <aside class="side-column">
+      <div class="panel stat-panel"><div class="section-kicker">LIBRARY SNAPSHOT</div><div class="stat-number" id="book-count">—</div><div class="stat-label">titles in this catalog</div><div class="stat-bottom"><span class="status-dot"></span> Catalog ready</div></div>
+      <div class="panel tips-panel"><div class="section-kicker">TRY ASKING</div><div class="tip"><span class="tip-icon">⌕</span><div><strong>Find a title</strong><p>“Do we have Clean Code?”</p></div></div><div class="tip"><span class="tip-icon">◷</span><div><strong>Check availability</strong><p>“Are AI books available?”</p></div></div><div class="tip"><span class="tip-icon">✧</span><div><strong>Get recommendations</strong><p>“Suggest books for beginners.”</p></div></div></div>
+    </aside>
+  </section>
+  <section id="catalog" class="catalog-section">
+    <div class="catalog-heading"><div><div class="section-kicker">EXPLORE THE COLLECTION</div><h2>Book catalog</h2></div><span id="result-count" class="result-count">Loading books…</span></div>
+    <div class="filters"><input id="search-books" placeholder="Search title, author, or topic…" aria-label="Search books"><select id="category-filter" aria-label="Filter by category"><option value="">All subjects</option></select></div>
+    <div id="book-grid" class="book-grid"><div class="loading-card">Loading catalog…</div></div>
+  </section>
+  <footer>Made for a better campus reading experience <span>·</span> <a href="/admin">Manage catalog</a></footer>
+</main>
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+</body></html>
