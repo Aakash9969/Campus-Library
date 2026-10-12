@@ -1,119 +1,41 @@
-# Campus Library Assistant — Full-Stack Project
+# College Library Chatbot — Netlify Edition
 
-A responsive college-library chatbot and book catalog built with **Flask (Python), SQLite, HTML, CSS, and vanilla JavaScript**. It runs locally and does not require a paid AI API key.
+This edition is adapted to deploy on Netlify: static HTML/CSS/JS frontend, a Netlify Function API, and Netlify Blobs for persistent catalog storage. It does not need a separate Flask server.
 
-## Features
+## Deploy from GitHub
 
-- Chat interface for finding titles, authors, subjects, and book availability.
-- Catalog search and category filtering.
-- Seeded sample catalog so the app works immediately.
-- Admin sign-in, add-book form, availability updates, and book deletion.
-- SQLite persistence.
-- Responsive desktop/mobile layout.
-- JSON REST API and a health endpoint.
+1. Push/upload this entire folder to a GitHub repository.
+2. In Netlify, choose **Add new site → Import an existing project** and select that repository.
+3. Netlify build settings:
+   - Build command: leave blank
+   - Publish directory: `public`
+   - Functions directory: `netlify/functions` (already configured in `netlify.toml`)
+4. In **Site configuration → Environment variables**, add:
+   - `ADMIN_PASSWORD`: choose a strong admin password
+   - `SESSION_SECRET`: a long random secret string (at least 32 characters)
+5. Trigger a deploy. Netlify should install `@netlify/blobs` from `package.json`.
 
-## How the chatbot works
+The first API request seeds the persistent Netlify Blobs catalog with the sample books. Data is stored in a site-wide Netlify Blobs store so it persists across deployments.
 
-The starter version uses lightweight keyword matching against book titles, authors, categories, ISBNs, and descriptions. This makes it free to run and easy to understand, but it is **not an LLM** and can misunderstand complex questions. It only knows books stored in the local database. You can later replace `answer_question()` in `app.py` with an LLM + retrieval-augmented generation (RAG) pipeline.
+## API
 
-## Requirements
+Static frontend files live in `public/`; the API source lives outside the publish directory in `netlify/functions/` so function source is not published as ordinary static files.
 
-- Python 3.10+
-- pip
+The app uses `/api/books`, `/api/categories`, `/api/chat`, `/api/admin/login`, `/api/admin/logout`, `/api/admin/session`, `/api/admin/books`, and related admin routes. These are routed directly to `netlify/functions/api.mjs`.
 
-## Run locally
+## Local development
 
-### 1. Create a virtual environment
-
-Windows PowerShell:
-```powershell
-py -m venv .venv
-.venv\Scripts\Activate.ps1
-```
-
-macOS/Linux:
+Install Node.js 20+ and the Netlify CLI:
 ```bash
-python3 -m venv .venv
-source .venv/bin/activate
+npm install
+npm install -g netlify-cli
+netlify dev
 ```
-
-### 2. Install packages
-
-```bash
-pip install -r requirements.txt
-```
-
-### 3. Configure secrets
-
-Copy `.env.example` to `.env`. Change `SECRET_KEY` and `ADMIN_PASSWORD`.
-
-Windows PowerShell:
-```powershell
-Copy-Item .env.example .env
-```
-
-macOS/Linux:
-```bash
-cp .env.example .env
-```
-
-### 4. Start the app
-
-```bash
-python app.py
-```
-
-Open http://127.0.0.1:5000 in your browser. Open `/admin` to manage the catalog.
-
-The SQLite database (`library.db`) is created automatically with sample books on first run.
-
-## API endpoints
-
-| Method | Endpoint | Purpose |
-|---|---|---|
-| GET | `/api/health` | Health check |
-| GET | `/api/books?q=clean&category=Programming` | Search books |
-| GET | `/api/categories` | List categories |
-| POST | `/api/chat` | Ask the chatbot; JSON body: `{"message":"..."}` |
-| POST | `/api/admin/login` | Admin login; JSON body: `{"password":"..."}` |
-| POST | `/api/admin/logout` | Log out |
-| POST | `/api/admin/books` | Add a book (admin session required) |
-| PUT | `/api/admin/books/<id>/availability` | Update available copies |
-| DELETE | `/api/admin/books/<id>` | Delete a book |
-
-Example chat request:
-```bash
-curl -X POST http://127.0.0.1:5000/api/chat \
-  -H "Content-Type: application/json" \
-  -d '{"message":"Which programming books are available?"}'
-```
-
-## Project structure
-
-```text
-college_library_chatbot/
-├── app.py
-├── requirements.txt
-├── .env.example
-├── .gitignore
-├── README.md
-├── templates/
-│   ├── index.html
-│   └── admin.html
-└── static/
-    ├── styles.css
-    ├── app.js
-    └── admin.js
-```
-
-## Important before deployment
-
-- Set a strong `SECRET_KEY` and `ADMIN_PASSWORD`.
-- Use HTTPS and a production WSGI server (for example, Gunicorn) instead of Flask's development server.
-- Add CSRF protection, login rate limiting, backups, and institutional authentication before exposing the admin interface publicly.
-- Replace the sample data with the college's real catalog and confirm that circulation/availability data is current.
-- Never enter real student records into this demo.
+Use Netlify Dev to test functions and Blobs locally.
 
 ## Notes
 
-The app is a complete runnable starter project, not connected to a college's actual library management system. Sample availability is illustrative. A real deployment needs catalog/circulation integration and a clearly defined data source.
+- This is a keyword-matching catalog assistant, not an LLM.
+- The sample catalog is illustrative; replace it with your college's actual catalog.
+- Admin access is protected by environment variables and a signed HttpOnly cookie. Use a strong `ADMIN_PASSWORD` and `SESSION_SECRET`.
+- Netlify Blobs is used for persistent book data; do not add a local SQLite file expecting it to persist on Netlify.

@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Library Admin</title><link rel="stylesheet" href="/styles.css"></head>
+<body>
+<header class="topbar"><a class="brand" href="/"><span class="brand-mark">L</span><span>Campus<span class="brand-muted">Library</span></span></a><nav><a href="/">Chat</a><a href="/#catalog">Book catalog</a><a class="active" href="/admin">Admin</a></nav></header>
+<main class="admin-page">
+  <div class="eyebrow"><span class="pulse"></span> CATALOG MANAGEMENT</div><h1>Library <em>admin.</em></h1><p class="admin-intro">Add titles and keep availability up to date.</p>
+  <section id="login-panel" class="panel admin-card">
+    <h2>Admin sign in</h2><p>Enter the password configured in your <code>.env</code> file.</p>
+    <form id="login-form" class="admin-login"><input id="admin-password" type="password" placeholder="Admin password" required><button class="primary-btn" type="submit">Sign in</button></form><div id="login-error" class="error-text"></div>
+  </section>
+  <section id="manage-panel" class="panel admin-card hidden">
+    <div class="admin-card-heading"><div><h2>Add a book</h2><p>Title and author are required.</p></div><button id="logout-btn" class="subtle-btn">Sign out</button></div>
+    <form id="book-form" class="book-form">
+      <label>Title *<input name="title" required></label><label>Author *<input name="author" required></label>
+      <label>Category<input name="category" value="General"></label><label>ISBN<input name="isbn"></label>
+      <label>Publication year<input name="year" type="number" min="1000" max="2100"></label><label>Total copies<input name="copies" type="number" min="0" value="1" required></label>
+      <label>Available copies<input name="available" type="number" min="0" value="1" required></label><label class="full-field">Description<textarea name="description" rows="3"></textarea></label>
+      <button class="primary-btn full-field" type="submit">Add to catalog</button>
+    </form><div id="admin-message" class="admin-message"></div>
+    <h2 class="manage-title">Current titles</h2><div id="admin-books" class="admin-books"></div>
+  </section>
+  <p class="back-link"><a href="/">← Back to assistant</a></p>
+</main><script src="/admin.js"></script>
+</body></html>

@@ -1,0 +1,11 @@
+{
+  "name": "college-library-chatbot-netlify",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@netlify/blobs": "^8.2.0"
+  }
+}
